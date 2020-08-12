@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  tasks:
+  - name: update all packages
+    raw: apt-get update
+  - name: install docker
+    raw: apt-get install docker.io -y
+  - name: getting from repo
+    raw: wget -O "/usr/bin/konfigadm" https://github.com/flanksource/konfigadm/releases/download/v0.5.3/konfigadm && chmod +x "/usr/bin/konfigadm"
+  - git:
+          repo: 'https://github.com/ramakrishna20/konfigadm.git'
+          dest: /tmp/
+          update: no
+  - name: konfigadm apply
+    raw: konfigadm apply --config=/tmp/konfigadm.yml
+  - git:
+          repo: 'https://github.com/ramakrishna20/kubeadm.git'
+          dest: /tmp/
+          update: no
+  - name: kubeadm init
+    raw: kubeadm init --config /tmp/kubeadm.yaml
+  - name: kubectl command
+    raw: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml

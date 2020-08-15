@@ -3,8 +3,6 @@
   tasks:
   - name: update all packages
     raw: apt-get update
-  - name: install docker
-    raw: apt-get install docker.io -y
   - name: getting from repo
     raw: wget -O "/usr/bin/konfigadm" https://github.com/flanksource/konfigadm/releases/download/v0.5.3/konfigadm && chmod +x "/usr/bin/konfigadm"
   - git:

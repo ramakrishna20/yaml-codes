@@ -3,19 +3,26 @@
   tasks:
   - name: update all packages
     raw: apt-get update
+  - name: creating directory
+    raw: mkdir /tmp/project1
+  - name: creating directory
+    raw: mkdir /tmp/project2
   - name: getting from repo
     raw: wget -O "/usr/bin/konfigadm" https://github.com/flanksource/konfigadm/releases/download/v0.5.3/konfigadm && chmod +x "/usr/bin/konfigadm"
   - git:
           repo: 'https://github.com/ramakrishna20/konfigadm.git'
-          dest: /tmp/
+          dest: /tmp/project1
           update: no
   - name: konfigadm apply
-    raw: konfigadm apply --config=/tmp/konfigadm.yml
+    raw: konfigadm apply --config=/tmp/project1/konfigadm.yml
   - git:
           repo: 'https://github.com/ramakrishna20/kubeadm.git'
-          dest: /tmp/
+          dest: /tmp/project2
           update: no
+  - name: changing the ip address in file
+    raw: sed "s/project/$(curl ifconfig.me)/" /tmp/project2/kubeadm.yaml >> /tmp/project2/project.yaml
   - name: kubeadm init
-    raw: kubeadm init --config /tmp/kubeadm.yaml
+    raw: kubeadm init --config /tmp/project2/project.yaml
   - name: kubectl command
     raw: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+

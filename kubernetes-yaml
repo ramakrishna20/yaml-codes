@@ -20,7 +20,7 @@
           dest: /tmp/project2
           update: no
   - name: changing the ip address in file
-    raw: sed "s/project/$(curl ifconfig.me)/" /tmp/project2/kubeadm.yaml >> /tmp/project2/project.yaml
+    raw: sed "s/ipaddress/$(curl ifconfig.me)/" /tmp/project2/kubeadm.yaml >> /tmp/project2/project.yaml
   - name: kubeadm init
     raw: kubeadm init --config /tmp/project2/project.yaml
   - name: kubectl command
